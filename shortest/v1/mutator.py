@@ -1,17 +1,12 @@
-from typing import Any, Optional
+from typing import Any
 from http import HTTPStatus
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
-class Payload(BaseModel):
+class EncoderPayload(BaseModel):
     '''Payload for shortening a URL'''
     source_url: str
-    custom_hex: Optional[str] = Field(
-        default=None,
-        max_length=10,
-        description='A custom url key to be used instead of hash'
-    )
 
 
 class Response(BaseModel):
