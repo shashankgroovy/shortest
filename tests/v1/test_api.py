@@ -3,12 +3,12 @@ from http import HTTPStatus
 import pytest
 from fastapi.testclient import TestClient
 
-from shortest.app import app
+from shortest.app import bootload
 from shortest.config import get_settings
 from shortest.v1 import processor
 from shortest.v1.mutator import EncoderPayload
 
-client = TestClient(app)
+client = TestClient(bootload())
 settings = get_settings()
 
 

@@ -1,0 +1,13 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: shortest
+    ports:
+      - "8000:8000"
+    environment:
+      - "ENV_FILE=${ENV_FILE}"
+    env_file:
+      - .env.prod
+
