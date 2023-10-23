@@ -2,22 +2,17 @@ from http import HTTPStatus
 from fastapi import APIRouter, HTTPException
 
 from .mutator import EncoderPayload, Response
-from .processor import decoder, encoder
+from .processor import CACHE, decoder, encoder
 
 
 router = APIRouter()
 
 
-@router.get("", tags=["v1"])
-@router.get("/", tags=["v1"])
-async def base() -> Response:
-    """A base route to list the available endpoints"""
-    route = {
-        "/decode": "Endpoint to get original URL from shortened URL",
-        "/encode": "Endpoint to shorten a URL",
-    }
+@router.get("/list", tags=["v1"])
+async def list_routes() -> Response:
+    """Route to list all available shortlinks"""
 
-    return Response(status=HTTPStatus.OK, message=route)
+    return Response(status=HTTPStatus.OK, message=CACHE)
 
 
 @router.get("/decode", tags=["v1"])
