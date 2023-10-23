@@ -7,3 +7,6 @@ format:
 lint:
 	black shortest tests --check
 	mypy shortest tests
+
+test:
+	python -m pytest

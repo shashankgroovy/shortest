@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 from .mutator import EncoderPayload, Response
 from .processor import decoder, encoder
@@ -23,11 +23,14 @@ async def base() -> Response:
 @router.get("/decode", tags=["v1"])
 async def decode(shortened_url: str) -> Response:
     """Decodes a shortened URL and returns the original URL"""
+
     result = decoder(shortened_url)
     if result:
         return Response(status=HTTPStatus.OK, message=result)
-    return Response(
-        status=HTTPStatus.NOT_FOUND, message="Couldn't find that shortened URL"
+
+    raise HTTPException(
+        status_code=HTTPStatus.NOT_FOUND,
+        detail="Couldn't find that shortened URL",
     )
 
 
