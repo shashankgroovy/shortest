@@ -7,7 +7,7 @@ CACHE: dict[str, str] = {}
 
 
 def _encode(url: str, *, offset: int = 0, length: int = 5) -> str:
-    '''Encodes a given url string using MD5 and returns a hex of
+    """Encodes a given url string using MD5 and returns a hex of
     given length
 
     Args:
@@ -17,25 +17,25 @@ def _encode(url: str, *, offset: int = 0, length: int = 5) -> str:
 
     Returns:
         str: A hex digest of given length
-    '''
+    """
     hex = hashlib.md5(url.encode()).hexdigest()
-    return hex[offset:(offset+length)]
+    return hex[offset : (offset + length)]
 
 
 def encoder(payload: EncoderPayload) -> str:
-    '''Returns a shortened url
+    """Returns a shortened url
 
     Args:
         payload: An Encoder payload
     Retuns:
         str: Shortened URL computed using MD5 hash
-    '''
+    """
 
     settings = get_settings()
 
     # Proceed with encoding the URL
     hex = _encode(payload.source_url)
-    url = f'{settings.base_url}/{hex}'
+    url = f"{settings.base_url}/{hex}"
 
     # Cache check
     if url in CACHE:
@@ -44,7 +44,7 @@ def encoder(payload: EncoderPayload) -> str:
 
         # Conflict! Recompute hash with offset
         hex = _encode(payload.source_url, offset=8)
-        url = f'{settings.base_url}/{hex}'
+        url = f"{settings.base_url}/{hex}"
 
     # Add to cache
     CACHE[url] = payload.source_url
@@ -52,13 +52,13 @@ def encoder(payload: EncoderPayload) -> str:
 
 
 def decoder(shortened_url: str) -> str | None:
-    '''Returns original URL upon decoding shortened URL
+    """Returns original URL upon decoding shortened URL
 
     Args:
         shortened_url: A shortened URL
     Retuns:
         str|None: Original URL or None
-    '''
+    """
 
     # Cache check
     if shortened_url in CACHE:

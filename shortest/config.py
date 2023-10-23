@@ -5,6 +5,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     """Settings defines the configurational settings"""
+
     app_env: str
     base_url: str
 
