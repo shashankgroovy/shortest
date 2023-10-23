@@ -11,6 +11,7 @@ packages = [{include = "shortest"}]
 python = "^3.11"
 fastapi = "^0.104.0"
 uvicorn = "^0.23.2"
+pydantic-settings = "^2.0.3"
 
 
 [build-system]
