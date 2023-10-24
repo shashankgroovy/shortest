@@ -24,11 +24,3 @@ class Cache:
     def set(self, key, value):
         """Syntactic sugar for setting a key-value pair"""
         return self.client.set(key, value)
-
-    def delete(self, key):
-        """Syntactic sugar for deleting a key"""
-        return self.client.get(key)
-
-
-# Initalize the default cache
-cache = Cache()

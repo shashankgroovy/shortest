@@ -25,7 +25,7 @@ dev:
 	uvicorn shortest.app:bootload --reload
 
 run:
-	gunicorn shortest.app:bootload --workers 1 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000
+	gunicorn shortest.app:bootload --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000
 
 server: clean build
 	docker compose up

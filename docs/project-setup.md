@@ -106,14 +106,8 @@ There are multiple ways to run the application which are listed below.
    ```
    OR
    ```bash
-   gunicorn shortest.app:bootload --workers 1 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000
+   gunicorn shortest.app:bootload --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000
    ```
-   > NOTE: The number of gunicorn workers have been limited to `1`, since we
-   > are strictly keeping things in-memory. Gunicorn workers have separate memory
-   > space and we might have misses while decoding urls therefore to prevent it
-   > we'll stick to 1 worker. However, shall you choose to introduce more
-   > workers, switch to a sharey memory resource like Redis and implement
-   > caching through it.
 
 
 ## Running Tests

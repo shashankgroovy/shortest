@@ -5,10 +5,11 @@ from typing import Optional
 from redis.exceptions import ConnectionError
 
 from shortest.config import get_settings
-from shortest.utils.cache import cache
+from shortest.utils.cache import Cache
 from .mutator import EncoderPayload
 
-
+# Initalize the cache and log
+cache = Cache()
 log = logging.getLogger(__name__)
 
 
