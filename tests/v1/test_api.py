@@ -7,8 +7,10 @@ from shortest.app import bootload
 from shortest.config import get_settings
 from shortest.v1 import processor
 from shortest.v1.mutator import EncoderPayload
+from shortest.utils.cache import cache
 
 client = TestClient(bootload())
+redis = create_redis_fixture()
 settings = get_settings()
 
 
@@ -45,8 +47,8 @@ def test_decode(sample_url, sample_shortend_url, monkeypatch):
     """Tests v1 decode api with a sample url that is first encoded and then
     checked for decoding"""
 
-    # Let's monkeypatch the processor.CACHE
-    monkeypatch.setitem(processor.CACHE, sample_shortend_url, sample_url)
+    # Let's monkeypatch the cache
+    monkeypatch.setattr(cache, "get", sample_url)
 
     params = {"shortened_url": sample_shortend_url}
     res = client.get("/v1/decode", params=params)

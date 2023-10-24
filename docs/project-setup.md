@@ -3,8 +3,10 @@
 ## Requirements
 
 - Python 3.11+
+- Redis
 - _(Optional)_ - Docker
 - _(Optional)_ - Docker Compose
+
 
 ## Installation
 
@@ -56,7 +58,7 @@ There are multiple ways to run the application which are listed below.
 2. ### Using Docker Compose
 
    Using docker compose to spin up the application.
-   It'll setup a container with the app
+   It'll setup a container with the app and redis.
 
    Simply run:
 
@@ -65,14 +67,8 @@ There are multiple ways to run the application which are listed below.
    ```
 
    This spins up several things and ties everything together:
-   - Database
+   - API worker
    - Redis
-   - 2 Worker clients
-   - Celery beat
-   - Flower
-
-   _NOTE: The `WORKER_REPLICA_COUNT` environment variable controls the number
-   of worker instances to be spawned._
 
 3. ### Pythonic way
 
@@ -82,11 +78,17 @@ There are multiple ways to run the application which are listed below.
 
    - [Install the dependencies](./project-setup.md#installation)
    - [Load environment variables](./project-setup.md#load-environment-variables)
+   - [Provision redis](./project-setup.md#running-redis)
 
    With that done, you can run the application independently.
 
+   You can also choose which config to follow by setting the `ENV_FILE`
+   environment variable `export ENV_FILE=.env` but for running things locally
+   use the `.env`
+
    #### Start the local dev server
-   This uses `uvicorn` to spin up the fastapi app.
+   This uses `uvicorn` to spin up the fastapi app. Please make sure Redis is up
+   and running.
 
    ```bash
    make dev
@@ -135,6 +137,28 @@ and for running very specific tests, run:
 ```
 python -m pytest tests/v1/test_api.py::test_encode
 ```
+
+
+## Running Redis
+
+1. If you have Redis locally
+   [installed](https://redis.io/docs/getting-started/installation/) then it's
+   fairly easy to run it. Simply run:
+   ```
+   redis-server
+   ```
+   This will make the server available at `localhost:6379`
+
+2. _(Recommended)_  Run Redis via docker compose. Simply execute:
+   ```
+   docker compose up redis
+   ```
+   This will make the server available at `redis:6379` using default port forwarding.
+   If you are running redis this way then please `export ENV_FILE=.env.prod`
+   use the `.env.prod` file or set the `redis_host=redis` instead of
+   `redis_host=localhost` since hostname should match the service name in
+   `docker-compose.yml`.
+
 
 ## Load environment variables
 

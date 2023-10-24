@@ -1,4 +1,17 @@
 services:
+  redis:
+    container_name: shortest_redis
+    hostname: localhost
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    expose:
+      - "6379"
+    networks:
+      - default
+    volumes:
+      - "./data:/app/data"
+
   api:
     build:
       context: .
@@ -10,4 +23,10 @@ services:
       - "ENV_FILE=${ENV_FILE}"
     env_file:
       - .env.prod
-
+    depends_on:
+      - redis
+    networks:
+      - default
+    volumes:
+      - "./data:/app/data"
+      - ./:/app

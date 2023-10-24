@@ -1,9 +1,15 @@
 import hashlib
+import logging
+from typing import Optional
+
+from redis.exceptions import ConnectionError
 
 from shortest.config import get_settings
+from shortest.utils.cache import cache
 from .mutator import EncoderPayload
 
-CACHE: dict[str, str] = {}
+
+log = logging.getLogger(__name__)
 
 
 def _encode(url: str, *, offset: int = 0, length: int = 5) -> str:
@@ -22,7 +28,7 @@ def _encode(url: str, *, offset: int = 0, length: int = 5) -> str:
     return hex[offset : (offset + length)]
 
 
-def encoder(payload: EncoderPayload) -> str:
+def encoder(payload: EncoderPayload) -> Optional[str]:
     """Returns a shortened url
 
     Args:
@@ -37,21 +43,29 @@ def encoder(payload: EncoderPayload) -> str:
     hex = _encode(payload.source_url)
     url = f"{settings.base_url}/{hex}"
 
-    # Cache check
-    if url in CACHE:
-        if CACHE[url] == payload.source_url:
-            return url
+    try:
+        # Cache check
+        stored_url = cache.get(url) or None
+        if stored_url:
+            if stored_url == payload.source_url:
+                return url
 
-        # Conflict! Recompute hash with offset
-        hex = _encode(payload.source_url, offset=8)
-        url = f"{settings.base_url}/{hex}"
+            # Conflict! Recompute hash with offset
+            hex = _encode(payload.source_url, offset=8)
+            url = f"{settings.base_url}/{hex}"
 
-    # Add to cache
-    CACHE[url] = payload.source_url
-    return url
+        # Populate cache
+        cache.set(url, payload.source_url)
+        return url
+    except ConnectionError as err:
+        log.warn(
+            "Whoops! Unable to connect to Redis."
+            " Make sure Redis is up and runnning"
+        )
+        raise err
 
 
-def decoder(shortened_url: str) -> str | None:
+def decoder(shortened_url: str) -> Optional[str]:
     """Returns original URL upon decoding shortened URL
 
     Args:
@@ -60,8 +74,13 @@ def decoder(shortened_url: str) -> str | None:
         str|None: Original URL or None
     """
 
-    # Cache check
-    if shortened_url in CACHE:
-        return CACHE[shortened_url]
-
-    return None
+    try:
+        # Cache check
+        stored_url = cache.get(shortened_url) or None
+        return stored_url.decode() if stored_url else None
+    except ConnectionError as err:
+        log.warn(
+            "Whoops! Unable to connect to Redis."
+            " Make sure Redis is up and runnning"
+        )
+        raise err
