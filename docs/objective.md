@@ -1,7 +1,6 @@
 ### Objective
 
-Your assignment is to implement a URL shortening service using Python and any
-framework.
+The idea is to implement a URL shortening service using Python
 
 ### Brief
 
@@ -34,14 +33,5 @@ http://short.est/GeAi9K.
 -   Completeness: did you complete the features? Are all the tests running?
 -   Correctness: does the functionality act in sensible, thought-out ways?
 -   Maintainability: is it written in a clean, maintainable way?
-
-
-### CodeSubmit
-
-Please organize, design, test and document your code as if it were going into
-production - then push your changes to the master branch. After you have pushed
-your code, you may submit the assignment on the assignment page.
-
-All the best and happy coding,
-
-The FINN GmbH Team
+-   Please organize, design, test and document your code as if it were going
+    into production.

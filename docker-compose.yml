@@ -13,6 +13,7 @@ services:
       - "./data:/app/data"
 
   api:
+    container_name: shortest_api
     build:
       context: .
       dockerfile: Dockerfile

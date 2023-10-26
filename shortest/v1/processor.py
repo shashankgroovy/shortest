@@ -26,7 +26,7 @@ def _encode(url: str, *, offset: int = 0, length: int = 5) -> str:
         str: A hex digest of given length
     """
     hex = hashlib.md5(url.encode()).hexdigest()
-    return hex[offset : (offset + length)]
+    return hex[offset: (offset + length)]
 
 
 def encoder(payload: EncoderPayload) -> Optional[str]:

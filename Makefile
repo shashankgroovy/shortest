@@ -3,7 +3,7 @@ build:
 
 clean:
 	docker compose down --remove-orphans
-	-docker rm shortest-api
+	-docker rm shortest_api shortest_redis
 	-docker rmi shortest:latest
 
 docker-run: build
